@@ -3,39 +3,64 @@
 def print_grid(grid):
     print()
     print(f" {grid[0][0]} | {grid[0][1]} | {grid[0][2]}")
-    print(" ---  --- ---")
+    print(" ---  ---  ---")
     print(f" {grid[1][0]} | {grid[1][1]} | {grid[1][2]}")
-    print(" ---  --- ---")
+    print(" ---  ---  ---git s")
     print(f" {grid[2][0]} | {grid[2][1]} | {grid[2][2]}")
     print()
 
 
+def check_turn(turns):
+    # Player 1 turn
+    if turns % 2 != 0:
+        i = 0
+    # Player 2 turn
+    else:
+        i = 1
+    print(f"It's {players[i]['name']} turn ('{players[i]['symbol']}').")
+    return i
+
+
 # player is a dict and grid is a list of lists
-def validate_answer(player, grid, move):
-    # Check if Pos Exists
-    gridpos_exists = any(move in moves for moves in grid)
-    # print(f"Position exists: {gridpos_exists}")
+def ask_and_validate_answer(player, grid):
+    while True:
+        # Chosen Move Position
+        move = input(f"Please {player['name']} choose the grid position where you want to play...\n").upper()
 
-    if gridpos_exists:
-        row_index = [i for i, lst in enumerate(grid) if move in lst][0]
-        column_index = grid[row_index].index(move)
-        grid[row_index][column_index] = player['symbol']
-        return grid
+        # Check if Pos Exists
+        gridpos_exists = any(move in moves for moves in grid)
+        # print(f"Position exists: {gridpos_exists}")
+
+        if gridpos_exists:
+            row_index = [i for i, lst in enumerate(grid) if move in lst][0]
+            column_index = grid[row_index].index(move)
+            grid[row_index][column_index] = player['symbol']
+            return grid
+        else:
+            print("Grid Position doesn't exists or it has already been played in this match.\nPlease enter a valid grid position value.\n")
+
+
+def check_end_of_game(player, grid, turns_left):
+    winner_combinations = [
+        grid[0][0] == grid[1][0] == grid[2][0],  # Verticals
+        grid[0][1] == grid[1][1] == grid[2][1],
+        grid[0][2] == grid[1][2] == grid[2][2],
+
+        grid[0][0] == grid[0][1] == grid[0][2],  # Horizontals
+        grid[1][0] == grid[1][1] == grid[1][2],
+        grid[2][0] == grid[2][1] == grid[2][2],
+
+        grid[0][0] == grid[1][1] == grid[2][2],  # Diagonals
+        grid[2][0] == grid[1][1] == grid[0][2]
+       ]
+
+    if winner_combinations[0] or winner_combinations[1] or winner_combinations[2] or winner_combinations[3] or winner_combinations[4] or winner_combinations[5] or winner_combinations[6] or winner_combinations[7]:
+        print(f"{player['name']} is the Winner!")
+        return True
     else:
-        print("Grid Position doesn't exists or it have already been played in this match.\nPlease enter a valid grid position value.")
-
-
-def check_for_winner(grid):
-    if grid[0][0] == grid[1][0] == grid[2][0] or grid[0][1] == grid[1][1] == grid[2][1] or grid[0][2] == grid[1][2] == grid[2][2]:
-        print("Vertical Winner!")
-        return True
-    elif grid[0][0] == grid[0][1] == grid[0][2] or grid[1][0] == grid[1][1] == grid[1][2] or grid[2][0] == grid[2][1] == grid[2][2]:
-        print("Horizontal Winner!")
-        return True
-    elif grid[0][0] == grid[1][1] == grid[2][2] or grid[2][0] == grid[1][1] == grid[0][2]:
-        print("Diagonal Winner!")
-        return True
-    else:
+        if turns_left == 1:
+            print("It's a Draw! -.-")
+            return True
         print("No winner yet!")
         return False
 
@@ -47,40 +72,34 @@ print("Welcome to My Minimalistic Game of Tic Tac Toe!")
 players = [{"name": "Player 1", "symbol": "X"},
            {"name": "Player 2", "symbol": "O"}]
 
-
+# Starting Grid Template
 grid = [['A1', 'A2', 'A3'],
         ['B1', 'B2', 'B3'],
         ['C1', 'C2', 'C3']]
 
 # Control Flow
-is_winner = False
+is_endgame = False
 turns = 9
-i = 0  # Player 1 = 0 & Player 2 = 1
+i = 0
 
-# Loop
-while turns != 0 and is_winner is False:
-    if turns % 2 != 0:
-        i = 0
-    else:
-        i = 1
+# Run game until End of Turns (Draw) or EndGame
+while is_endgame is False:
+    # Check which player turn is it
+    i = check_turn(turns)
 
-    print(f"It's {players[i]['name']} turn ('{players[i]['symbol']}').")
-
-    # Print grid format without grid columns
     print_grid(grid)
 
-    # Chosen Move Position
-    player_move = input(f"Please {players[i]['name']} choose the grid position where you want to play...\n").upper()
-
     # Validate answer, if valid replace in grid, if not ask for gridpos again. Returns updated grid (list of lists)
-    updated_grid = validate_answer(players[i], grid, player_move)
-    # print_grid(updated_grid)
+    updated_grid = ask_and_validate_answer(players[i], grid)
 
-    # check grid for winner
-    is_winner = check_for_winner(updated_grid)
+    # Check Updated Grid for End of Game
+    is_endgame = check_end_of_game(players[i], updated_grid, turns)
 
     # Turn Over Countdown
     turns -= 1
+
+if is_endgame:
+    print_grid(updated_grid)
 
 
 # NOT USED CODE
@@ -97,8 +116,10 @@ while turns != 0 and is_winner is False:
 
 # Print grid format with grid columns
 # print("    1   2   3")
-# print(f" A  {a1} | {a2} | {a3}")
+# print(f" A  {grid[0][0]} | {grid[0][1]} | {grid[0][2]}")
 # print("   --- --- ---")
-# print(f" B  {b1} | {b2} | {b3}")
+# print(f" B  {grid[1][0]} | {grid[1][1]} | {grid[1][2]}")
 # print("   --- --- ---")
-# print(f" C  {c1} | {c2} | {c3}")
+# print(f" C  {grid[2][0]} | {grid[2][1]} | {grid[2][2]}")
+
+
