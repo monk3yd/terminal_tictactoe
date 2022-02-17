@@ -1,5 +1,6 @@
 # FUNCTIONS
-# grid attribute is a list of lists
+
+# Prints actual grid . Attribute is a list of lists
 def print_grid(grid):
     print()
     print(f" {grid[0][0]} | {grid[0][1]} | {grid[0][2]}")
@@ -10,6 +11,7 @@ def print_grid(grid):
     print()
 
 
+# Check whose player's turn is it
 def check_turn(turns):
     # Player 1 turn
     if turns % 2 != 0:
