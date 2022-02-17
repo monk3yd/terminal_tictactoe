@@ -22,7 +22,7 @@ def validate_answer(player, grid, move):
         grid[row_index][column_index] = player['symbol']
         return grid
     else:
-        print("Grid Position doesn't exists or it have already been played in this match.\n Please enter a valid grid value.")
+        print("Grid Position doesn't exists or it have already been played in this match.\nPlease enter a valid grid position value.")
 
 
 def check_for_winner(grid):
