@@ -3,9 +3,9 @@
 def print_grid(grid):
     print()
     print(f" {grid[0][0]} | {grid[0][1]} | {grid[0][2]}")
-    print(" ---  ---  ---")
+    print("----+----+---")
     print(f" {grid[1][0]} | {grid[1][1]} | {grid[1][2]}")
-    print(" ---  ---  ---git s")
+    print("----+----+---")
     print(f" {grid[2][0]} | {grid[2][1]} | {grid[2][2]}")
     print()
 
@@ -55,11 +55,11 @@ def check_end_of_game(player, grid, turns_left):
        ]
 
     if winner_combinations[0] or winner_combinations[1] or winner_combinations[2] or winner_combinations[3] or winner_combinations[4] or winner_combinations[5] or winner_combinations[6] or winner_combinations[7]:
-        print(f"{player['name']} is the Winner!")
+        print(f"\n{player['name']} is the Winner!")
         return True
     else:
         if turns_left == 1:
-            print("It's a Draw! -.-")
+            print("\nIt's a Draw! -.-")
             return True
         print("No winner yet!")
         return False
@@ -69,8 +69,8 @@ def check_end_of_game(player, grid, turns_left):
 print("Welcome to My Minimalistic Game of Tic Tac Toe!")
 
 # Players
-players = [{"name": "Player 1", "symbol": "X"},
-           {"name": "Player 2", "symbol": "O"}]
+players = [{"name": "Player 1", "symbol": "X "},
+           {"name": "Player 2", "symbol": "O "}]
 
 # Starting Grid Template
 grid = [['A1', 'A2', 'A3'],
